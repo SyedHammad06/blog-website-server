@@ -34,13 +34,15 @@ router.post(
         throw new Error('No image file found!!');
       }
 
-      const buffer = await sharp(req.file.buffer).png().toBuffer();
+      const buffer = await sharp(req.file.buffer)
+        .resize({ width: 800, height: 390 })
+        .png()
+        .toBuffer();
 
       blog.image = buffer;
       blog.save();
       res.send({ success: true, blog });
     } catch (err) {
-      console.log(err.message);
       res.status(400).send({ error: err.message });
     }
   },
